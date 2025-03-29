@@ -14,6 +14,8 @@ const API_VERSIONS = {
 };
 
 let currentTab = 'rp';
+let rpManifest = null; // Untuk menyimpan manifest Resource Pack
+let bpManifest = null; // Untuk menyimpan manifest Behavior Pack
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
@@ -158,6 +160,33 @@ function generateManifest() {
         ]
     };
 
+    if (currentTab === 'bp' && document.getElementById('link-to-rp').checked) {
+        const rpUUID = document.getElementById('rp-uuid-header').value;
+        if (!rpUUID) {
+            alert('Please generate the Resource Pack UUID first!');
+            return;
+        }
+
+        manifest.dependencies = [
+            {
+                uuid: rpUUID,
+                version: [
+                    parseInt(document.getElementById('rp-version-major').value),
+                    parseInt(document.getElementById('rp-version-minor').value),
+                    parseInt(document.getElementById('rp-version-rev').value)
+                ]
+            }
+        ];
+    }
+
+    // Simpan manifest ke variabel global berdasarkan tab aktif
+    if (currentTab === 'rp') {
+        rpManifest = manifest;
+    } else if (currentTab === 'bp') {
+        bpManifest = manifest;
+    }
+
+    // Tampilkan manifest di output
     document.getElementById('output').textContent = JSON.stringify(manifest, null, 4);
 }
 
@@ -194,45 +223,40 @@ function downloadManifest() {
 
 // Fungsi untuk membuat file .mcpack atau .mcaddon
 function downloadPack(format) {
-    const output = document.getElementById('output').textContent;
-    if (!output || output.startsWith('//') || output.startsWith('Error:')) {
-        alert('Generate a valid manifest first!');
-        return;
-    }
-
-    try {
-        JSON.parse(output); // Validasi JSON
-    } catch (e) {
-        alert('The manifest content is not valid JSON!');
-        return;
-    }
-
     const zip = new JSZip();
 
-    // Tambahkan manifest.json
-    zip.file('manifest.json', output);
-
-    // Tambahkan file tambahan berdasarkan tab aktif (RP atau BP)
-    if (currentTab === 'rp') {
-        // Resource Pack: Tambahkan folder textures, sounds, dll.
-        zip.file('textures/texture.png', ''); // Placeholder untuk file texture
-        zip.file('sounds/sound.ogg', ''); // Placeholder untuk file sound
-    } else if (currentTab === 'bp') {
-        // Behavior Pack: Tambahkan folder scripts jika Script Module diaktifkan
-        const enableScript = document.getElementById('enable-script').checked;
-        if (enableScript) {
-            zip.file('scripts/main.js', '// Example script content'); // Placeholder untuk file script
+    if (format === 'mcpack') {
+        // Unduh hanya manifest dari tab aktif
+        const manifest = currentTab === 'rp' ? rpManifest : bpManifest;
+        if (!manifest) {
+            alert(`Please generate the ${currentTab === 'rp' ? 'Resource Pack' : 'Behavior Pack'} manifest first!`);
+            return;
         }
 
-        // Tambahkan folder functions sebagai contoh
-        zip.file('functions/example.mcfunction', '# Example function content'); // Placeholder untuk file function
+        zip.file('manifest.json', JSON.stringify(manifest, null, 4));
+    } else if (format === 'mcaddon') {
+        // Gabungkan RP dan BP ke dalam satu file
+        if (!rpManifest || !bpManifest) {
+            alert('Please generate both Resource Pack and Behavior Pack manifests first!');
+            return;
+        }
+
+        // Tambahkan Resource Pack ke ZIP
+        const rpFolder = zip.folder('resource_pack');
+        rpFolder.file('manifest.json', JSON.stringify(rpManifest, null, 4));
+        rpFolder.file('textures/texture.png', ''); // Placeholder untuk file texture
+
+        // Tambahkan Behavior Pack ke ZIP
+        const bpFolder = zip.folder('behavior_pack');
+        bpFolder.file('manifest.json', JSON.stringify(bpManifest, null, 4));
+        bpFolder.file('scripts/main.js', '// Example script content'); // Placeholder untuk file script
     }
 
     // Generate ZIP dan unduh
     zip.generateAsync({ type: 'blob' }).then((content) => {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(content);
-        a.download = `pack.${format}`; // Ekstensi file sesuai format
+        a.download = `pack.${format}`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

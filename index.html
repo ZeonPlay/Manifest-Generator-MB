@@ -137,8 +137,15 @@
         </div>
     </div>
 
-    <div style="text-align: center; margin: 20px 0;">
-        <button onclick="generateManifest()" style="padding: 15px 30px; font-size: 16px;">Generate Manifest</button>
+    <div class="manifest-actions">
+        <div class="link-to-rp-container">
+            <label class="link-to-rp-label">
+                <input type="checkbox" id="link-to-rp" class="link-to-rp-checkbox">
+                <span class="custom-checkbox"></span> Link Pack as Dependencies
+            </label>
+            <small class="link-to-rp-description">Only works if RP and BP are already done</small>
+        </div>
+        <button onclick="generateManifest()" class="generate-manifest-btn">Generate Manifest</button>
     </div>
 
     <div class="preview" id="preview">
@@ -149,7 +156,7 @@
             <button onclick="downloadManifest()">Download manifest.json</button>
             <!-- Tambahkan tombol di HTML -->
             <button onclick="downloadPack('mcpack')">Download as .mcpack</button>
-            <button onclick="downloadPack('mcaddon')">Download as .mcaddon</button>
+            <button onclick="downloadPack('mcaddon')">Download Combined RP + BP as .mcaddon</button>
             <button onclick="clearForm()" class="clearForm">Clear Form</button>
         </div>
     </div>
