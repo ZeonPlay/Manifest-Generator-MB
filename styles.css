@@ -182,7 +182,7 @@ button.secondary {
     font-style: italic;
 }
 
-.secondary {
+.clearForm {
     position: absolute;
     top: 10px; /* Jarak dari atas */
     right: 10px; /* Jarak dari kanan */
@@ -195,6 +195,6 @@ button.secondary {
     cursor: pointer;
 }
 
-.secondary:hover {
+.clearForm:hover {
     background-color: #d32f2f;
 }
