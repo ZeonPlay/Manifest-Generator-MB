@@ -256,6 +256,34 @@ button.secondary {
     gap: 15px; /* Jarak antara checkbox dan tombol */
 }
 
+/* Styling untuk container checkbox */
+.link-to-rp-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Jarak antara checkbox dan teks */
+    margin-bottom: 10px;
+}
+
+/* Styling untuk label checkbox */
+.link-to-rp-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Styling untuk deskripsi checkbox */
+.link-to-rp-description {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    text-align: center;
+}
+
 /* Styling untuk checkbox container */
 .link-to-rp-container {
     background-color: #f9f9f9;
@@ -277,7 +305,6 @@ button.secondary {
     gap: 10px;
     position: relative;
 }
-
 
 /* Styling untuk tombol Generate Manifest */
 .generate-manifest-btn {
