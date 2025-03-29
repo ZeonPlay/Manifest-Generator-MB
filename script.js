@@ -128,181 +128,37 @@ function updateApiVersions(selectElement) {
 
 // Main generator function
 function generateManifest() {
-    const output = document.getElementById('output');
-    const loading = document.getElementById('loading');
-    
-    // Show loading
-    output.classList.add('hidden');
-    loading.classList.remove('hidden');
-    
-    // Process in next tick to allow UI to update
-    setTimeout(() => {
-        try {
-            let manifest;
-            
-            if(currentTab === 'rp') {
-                // Validate required fields
-                if(!document.getElementById('rp-name').value) {
-                    throw new Error('Pack name is required!');
-                }
-                
-                manifest = {
-                    format_version: 2,
-                    header: {
-                        name: document.getElementById('rp-name').value,
-                        description: document.getElementById('rp-description').value || undefined,
-                        uuid: document.getElementById('rp-uuid-header').value || generateUUID('rp-uuid-header'),
-                        version: [
-                            parseInt(document.getElementById('rp-version-major').value),
-                            parseInt(document.getElementById('rp-version-minor').value),
-                            parseInt(document.getElementById('rp-version-rev').value)
-                        ],
-                        min_engine_version: [1, 20, 0]
-                    },
-                    modules: [{
-                        type: "resources",
-                        uuid: document.getElementById('rp-uuid-module').value || generateUUID('rp-uuid-module'),
-                        version: [
-                            parseInt(document.getElementById('rp-version-major').value),
-                            parseInt(document.getElementById('rp-version-minor').value),
-                            parseInt(document.getElementById('rp-version-rev').value)
-                        ]
-                    }]
-                };
-            
-                const selectedCapabilities = Array.from(document.querySelectorAll('.rp-capability:checked')).map(c => c.value);
-                if (selectedCapabilities.length > 0) {
-                    manifest.capabilities = selectedCapabilities;
-                }
-                
-                // Add subpacks if any
-                const subpacks = Array.from(document.querySelectorAll('#subpacks-container .subpack-item')).map(div => {
-                    const name = div.querySelector('.subpack-name').value;
-                    const folder = div.querySelector('.subpack-folder').value;
-                    
-                    if(!name || !folder) {
-                        throw new Error('Subpack name and folder are required!');
-                    }
-                    
-                    return {
-                        name: name,
-                        folder_name: folder,
-                        memory_tier: parseInt(div.querySelector('.subpack-tier').value)
-                    };
-                });
-                
-                if(subpacks.length > 0) {
-                    manifest.subpacks = subpacks;
-                }
-                
-            } else {
-                // Behavior Pack generation
-                if(!document.getElementById('bp-name').value) {
-                    throw new Error('Pack name is required!');
-                }
-                
-                const enableData = document.getElementById('enable-data').checked;
-                const enableScript = document.getElementById('enable-script').checked;
-                
-                if(!enableData && !enableScript) {
-                    throw new Error('Select at least one module type (Data or Script)!');
-                }
-                
-                manifest = {
-                    format_version: 2,
-                    header: {
-                        name: document.getElementById('bp-name').value,
-                        uuid: generateUUID(),
-                        version: [1, 0, 0],
-                        min_engine_version: [1, 20, 0]
-                    },
-                    modules: []
-                };
-                
-                // Data Module
-                if(enableData) {
-                    manifest.modules.push({
-                        type: "data",
-                        uuid: document.getElementById('bp-uuid-data').value || generateUUID('bp-uuid-data'),
-                        version: [1, 0, 0]
-                    });
-                }
-                
-                // Script Module
-                if(enableScript) {
-                    const scriptEntry = document.getElementById('bp-script-entry').value;
-                    if(!scriptEntry) {
-                        throw new Error('Script entry file is required when Script Module is enabled!');
-                    }
-                    
-                    manifest.modules.push({
-                        type: "script",
-                        uuid: document.getElementById('bp-uuid-script').value || generateUUID('bp-uuid-script'),
-                        version: [1, 0, 0],
-                        entry: scriptEntry,
-                        language: "javascript"
-                    });
-                    
-                    // Add API dependencies
-                    const apiDependencies = Array.from(document.querySelectorAll('#script-apis .api-item'))
-                        .filter(item => {
-                            const module = item.querySelector('.api-module').value;
-                            const version = item.querySelector('.api-version').value;
-                            return module && version;
-                        })
-                        .map(item => ({
-                            module_name: item.querySelector('.api-module').value,
-                            version: item.querySelector('.api-version').value
-                        }));
-                    
-                    if(apiDependencies.length > 0) {
-                        if(!manifest.dependencies) manifest.dependencies = [];
-                        manifest.dependencies.push(...apiDependencies);
-                    }
-                }
-                
-                // Other Dependencies
-                const dependencies = Array.from(document.querySelectorAll('#bp-dependencies .dependency-item')).map(div => {
-                    const idInput = div.querySelector('input:nth-child(2)');
-                    const versionInput = div.querySelector('input:nth-child(3)');
-                    
-                    if(!idInput.value || !versionInput.value) {
-                        throw new Error('Dependency UUID/name and version are required!');
-                    }
-                    
-                    // Check if it's a module name (starts with @) or UUID
-                    if(idInput.value.startsWith('@')) {
-                        return {
-                            module_name: idInput.value,
-                            version: versionInput.value
-                        };
-                    } else {
-                        return {
-                            uuid: idInput.value,
-                            version: versionInput.value.includes('[') ? 
-                                JSON.parse(versionInput.value) : 
-                                versionInput.value
-                        };
-                    }
-                });
-                
-                if(dependencies.length > 0) {
-                    if(!manifest.dependencies) manifest.dependencies = [];
-                    manifest.dependencies.push(...dependencies);
-                }
+    const manifest = {
+        format_version: 2,
+        header: {
+            name: document.getElementById(currentTab === 'rp' ? 'rp-name' : 'bp-name').value,
+            description: document.getElementById(currentTab === 'rp' ? 'rp-description' : 'bp-description').value,
+            uuid: document.getElementById(currentTab === 'rp' ? 'rp-uuid-header' : 'bp-uuid-data').value,
+            version: [
+                parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-major' : 'bp-version-major').value),
+                parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-minor' : 'bp-version-minor').value),
+                parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-rev' : 'bp-version-rev').value)
+            ],
+            min_engine_version: [
+                parseInt(document.getElementById(currentTab === 'rp' ? 'rp-min-engine-major' : 'bp-min-engine-major').value),
+                parseInt(document.getElementById(currentTab === 'rp' ? 'rp-min-engine-minor' : 'bp-min-engine-minor').value),
+                parseInt(document.getElementById(currentTab === 'rp' ? 'rp-min-engine-rev' : 'bp-min-engine-rev').value)
+            ]
+        },
+        modules: [
+            {
+                type: currentTab === 'rp' ? 'resources' : 'data',
+                uuid: document.getElementById(currentTab === 'rp' ? 'rp-uuid-module' : 'bp-uuid-script').value,
+                version: [
+                    parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-major' : 'bp-version-major').value),
+                    parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-minor' : 'bp-version-minor').value),
+                    parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-rev' : 'bp-version-rev').value)
+                ]
             }
-            
-            // Display the result
-            output.textContent = JSON.stringify(manifest, null, 4);
-            output.classList.remove('hidden');
-            
-        } catch (error) {
-            output.textContent = "Error: " + error.message;
-            output.classList.remove('hidden');
-        } finally {
-            loading.classList.add('hidden');
-        }
-    }, 50);
+        ]
+    };
+
+    document.getElementById('output').textContent = JSON.stringify(manifest, null, 4);
 }
 
 // Utility functions
