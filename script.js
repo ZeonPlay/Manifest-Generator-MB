@@ -160,25 +160,6 @@ function generateManifest() {
         ]
     };
 
-    if (currentTab === 'bp' && document.getElementById('link-to-rp').checked) {
-        const rpUUID = document.getElementById('rp-uuid-header').value;
-        if (!rpUUID) {
-            alert('Please generate the Resource Pack UUID first!');
-            return;
-        }
-
-        manifest.dependencies = [
-            {
-                uuid: rpUUID,
-                version: [
-                    parseInt(document.getElementById('rp-version-major').value),
-                    parseInt(document.getElementById('rp-version-minor').value),
-                    parseInt(document.getElementById('rp-version-rev').value)
-                ]
-            }
-        ];
-    }
-
     // Simpan manifest ke variabel global berdasarkan tab aktif
     if (currentTab === 'rp') {
         rpManifest = manifest;
