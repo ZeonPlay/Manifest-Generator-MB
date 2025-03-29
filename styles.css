@@ -198,3 +198,50 @@ button.secondary {
 .clearForm:hover {
     background-color: #d32f2f;
 }
+
+/* Default styles (untuk layar besar seperti Windows desktop) sudah ada */
+
+/* Tambahkan media queries untuk layar kecil */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .tabs {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .tab-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .form-section {
+        padding: 15px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr; /* Satu kolom untuk layar kecil */
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    button {
+        width: 100%; /* Tombol memenuhi lebar layar */
+    }
+
+    .preview {
+        max-height: 300px; /* Batasi tinggi preview pada layar kecil */
+        overflow-y: auto;
+    }
+
+    .clearForm {
+        position: static; /* Posisi tombol Clear Form diatur ulang */
+        margin-top: 10px;
+        width: 100%;
+    }
+}

@@ -344,13 +344,35 @@ function downloadPack(format) {
         return;
     }
 
-    // Buat file ZIP
+    try {
+        JSON.parse(output); // Validasi JSON
+    } catch (e) {
+        alert('The manifest content is not valid JSON!');
+        return;
+    }
+
     const zip = new JSZip();
+
+    // Tambahkan manifest.json
     zip.file('manifest.json', output);
 
-    // Tambahkan file tambahan jika diperlukan
-    // Contoh: zip.file('scripts/main.js', '// Your script here');
+    // Tambahkan file tambahan berdasarkan tab aktif (RP atau BP)
+    if (currentTab === 'rp') {
+        // Resource Pack: Tambahkan folder textures, sounds, dll.
+        zip.file('textures/texture.png', ''); // Placeholder untuk file texture
+        zip.file('sounds/sound.ogg', ''); // Placeholder untuk file sound
+    } else if (currentTab === 'bp') {
+        // Behavior Pack: Tambahkan folder scripts jika Script Module diaktifkan
+        const enableScript = document.getElementById('enable-script').checked;
+        if (enableScript) {
+            zip.file('scripts/main.js', '// Example script content'); // Placeholder untuk file script
+        }
 
+        // Tambahkan folder functions sebagai contoh
+        zip.file('functions/example.mcfunction', '# Example function content'); // Placeholder untuk file function
+    }
+
+    // Generate ZIP dan unduh
     zip.generateAsync({ type: 'blob' }).then((content) => {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(content);
@@ -359,6 +381,8 @@ function downloadPack(format) {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(a.href);
+    }).catch((err) => {
+        alert('Failed to generate the pack: ' + err.message);
     });
 }
 
