@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Manifest Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+    <h1>Minecraft Manifest Generator</h1>
+    
+    <div class="tabs">
+        <button class="tab-button active" onclick="switchTab('rp')">Resource Pack</button>
+        <button class="tab-button" onclick="switchTab('bp')">Behavior Pack</button>
+    </div>
+
+    <!-- Resource Pack Form -->
+    <div id="rp-form" class="form-section">
+        <h2>Resource Pack Settings</h2>
+        <div class="grid">
+            <div>
+                <label for="rp-name">Pack Name:</label>
+                <input type="text" id="rp-name" placeholder="My Awesome Pack" required>
+                
+                <label for="rp-description">Description:</label>
+                <textarea id="rp-description" rows="3" placeholder="A detailed description of your pack"></textarea>
+                
+                <label for="rp-uuid-header">UUID (Header):</label>
+                <input type="text" id="rp-uuid-header" placeholder="Will auto-generate if empty">
+                <button onclick="generateUUID('rp-uuid-header')" class="secondary">Generate</button>
+                
+                <label for="rp-uuid-module">UUID (Module):</label>
+                <input type="text" id="rp-uuid-module" placeholder="Will auto-generate if empty">
+                <button onclick="generateUUID('rp-uuid-module')" class="secondary">Generate</button>
+            </div>
+            
+            <div>
+                <label>Version:</label>
+                <div class="version-input">
+                    <input type="number" id="rp-version-major" value="1" min="1">.
+                    <input type="number" id="rp-version-minor" value="0" min="0">.
+                    <input type="number" id="rp-version-rev" value="0" min="0">
+                </div>
+                
+                <label>Capabilities:</label>
+                <div>
+                    <label><input type="checkbox" class="rp-capability" value="chemistry"> Chemistry</label><br>
+                    <label><input type="checkbox" class="rp-capability" value="raytraced"> Raytraced</label><br>
+                    <label><input type="checkbox" class="rp-capability" value="editorExtension"> Editor Extension</label>
+                </div>
+                
+                <label>Subpacks:</label>
+                <div id="subpacks-container"></div>
+                <button onclick="addSubpack()">+ Add Subpack</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Behavior Pack Form -->
+    <div id="bp-form" class="form-section hidden">
+        <h2>Behavior Pack Settings</h2>
+        <div class="grid">
+            <div>
+                <label for="bp-name">Pack Name:</label>
+                <input type="text" id="bp-name" placeholder="My Behavior Pack" required>
+                
+                <div class="module-toggle">
+                    <label>
+                        <input type="checkbox" id="enable-data" checked> Data Module
+                    </label>
+                    <label>
+                        <input type="checkbox" id="enable-script" checked> Script Module
+                    </label>
+                </div>
+
+                <div id="data-module-section" class="module-section">
+                    <label for="bp-uuid-data">Data Module UUID:</label>
+                    <input type="text" id="bp-uuid-data" placeholder="Will auto-generate if empty">
+                    <button onclick="generateUUID('bp-uuid-data')" class="secondary">Generate</button>
+                </div>
+
+                <div id="script-module-section" class="module-section">
+                    <label for="bp-uuid-script">Script Module UUID:</label>
+                    <input type="text" id="bp-uuid-script" placeholder="Will auto-generate if empty">
+                    <button onclick="generateUUID('bp-uuid-script')" class="secondary">Generate</button>
+                    
+                    <label for="bp-script-entry">Script Entry File:</label>
+                    <input type="text" id="bp-script-entry" placeholder="scripts/main.js">
+                    
+                    <label>Scripting APIs:</label>
+                    <div id="script-apis">
+                        <div class="api-item">
+                            <select class="api-module" onchange="updateApiVersions(this)">
+                                <option value="">Choose Module</option>
+                                <option value="@minecraft/server">@minecraft/server</option>
+                                <option value="@minecraft/server-ui">@minecraft/server-ui</option>
+                                <option value="@minecraft/server-net">@minecraft/server-net</option>
+                                <option value="@minecraft/server-admin">@minecraft/server-admin</option>
+                            </select>
+                            <select class="api-version">
+                                <option value="">Choose Version</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="addApiModule()">+ Add API Module</button>
+                </div>
+            </div>
+            
+            <div>
+                <label>Dependencies:</label>
+                <div id="bp-dependencies"></div>
+                <button onclick="addDependency()">+ Add Dependency</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin: 20px 0;">
+        <button onclick="generateManifest()" style="padding: 15px 30px; font-size: 16px;">Generate Manifest</button>
+    </div>
+
+    <div class="preview" id="preview">
+        <div id="loading" class="hidden">Generating...</div>
+        <pre><code id="output">// Your manifest will appear here</code></pre>
+        <div class="action-buttons">
+            <button onclick="copyToClipboard()">Copy JSON</button>
+            <button onclick="downloadManifest()">Download manifest.json</button>
+            <!-- Tambahkan tombol di HTML -->
+            <button onclick="downloadPack('mcpack')">Download as .mcpack</button>
+            <button onclick="downloadPack('mcaddon')">Download as .mcaddon</button>
+            <button onclick="clearForm()" class="secondary">Clear Form</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

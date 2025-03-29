@@ -1,0 +1,200 @@
+:root {
+    --primary: #2ecc71;
+    --secondary: #27ae60;
+    --dark: #2c3e50;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f5f6fa;
+    color: #333;
+}
+
+h1 {
+    color: var(--dark);
+    text-align: center;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.tab-button {
+    padding: 12px 24px;
+    background: var(--primary);
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.tab-button:hover {
+    background: var(--secondary);
+}
+
+.tab-button.active {
+    background: var(--dark);
+}
+
+.form-section {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="number"] {
+    width: 80px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.version-input {
+    margin-bottom: 15px;
+}
+
+.module-toggle {
+    margin: 15px 0;
+    display: flex;
+    gap: 20px;
+}
+
+.module-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.module-section {
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background: #f9f9f9;
+}
+
+.preview {
+    background: var(--dark);
+    color: #f1f1f1;
+    padding: 20px;
+    border-radius: 5px;
+    max-height: 500px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    position: relative;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+button {
+    padding: 10px 20px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: var(--secondary);
+}
+
+button.secondary {
+    background: #7f8c8d;
+}
+
+.hidden {
+    display: none;
+}
+
+.subpack-item, .dependency-item, .api-item {
+    background: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    position: relative;
+}
+
+.remove-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.api-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.api-item select {
+    flex: 1;
+}
+
+#loading {
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    font-style: italic;
+}
+
+.secondary {
+    position: absolute;
+    top: 10px; /* Jarak dari atas */
+    right: 10px; /* Jarak dari kanan */
+    z-index: 1000; /* Pastikan tombol berada di atas elemen lain */
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.secondary:hover {
+    background-color: #d32f2f;
+}
