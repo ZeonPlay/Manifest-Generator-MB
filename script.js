@@ -147,23 +147,113 @@ function generateManifest() {
                 parseInt(document.getElementById(currentTab === 'rp' ? 'rp-min-engine-rev' : 'bp-min-engine-rev').value)
             ]
         },
-        modules: [
-            {
-                type: currentTab === 'rp' ? 'resources' : 'data',
-                uuid: document.getElementById(currentTab === 'rp' ? 'rp-uuid-module' : 'bp-uuid-script').value,
-                version: [
-                    parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-major' : 'bp-version-major').value),
-                    parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-minor' : 'bp-version-minor').value),
-                    parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-rev' : 'bp-version-rev').value)
-                ]
-            }
-        ]
+        modules: []
     };
 
-    // Simpan manifest ke variabel global berdasarkan tab aktif
+    // Handle Resource Pack
     if (currentTab === 'rp') {
+        manifest.modules.push({
+            type: 'resources',
+            uuid: document.getElementById('rp-uuid-module').value,
+            version: [
+                parseInt(document.getElementById('rp-version-major').value),
+                parseInt(document.getElementById('rp-version-minor').value),
+                parseInt(document.getElementById('rp-version-rev').value)
+            ]
+        });
+
+        // Handle capabilities jika ada yang dicentang
+        const capabilities = [];
+        document.querySelectorAll('.rp-capability:checked').forEach(cb => {
+            capabilities.push(cb.value);
+        });
+        if (capabilities.length > 0) {
+            manifest.header.capabilities = capabilities;
+        }
+
+        // Handle subpacks jika ada
+        const subpacks = [];
+        document.querySelectorAll('.subpack-item').forEach(item => {
+            subpacks.push({
+                name: item.querySelector('.subpack-name').value,
+                folder_name: item.querySelector('.subpack-folder').value,
+                memory_tier: parseInt(item.querySelector('.subpack-tier').value)
+            });
+        });
+        if (subpacks.length > 0) {
+            manifest.subpacks = subpacks;
+        }
+
         rpManifest = manifest;
-    } else if (currentTab === 'bp') {
+    } 
+    // Handle Behavior Pack
+    else if (currentTab === 'bp') {
+        // Data Module
+        if (document.getElementById('enable-data').checked) {
+            manifest.modules.push({
+                type: 'data',
+                uuid: document.getElementById('bp-uuid-data').value,
+                version: [
+                    parseInt(document.getElementById('bp-version-major').value),
+                    parseInt(document.getElementById('bp-version-minor').value),
+                    parseInt(document.getElementById('bp-version-rev').value)
+                ]
+            });
+        }
+
+        // Script Module
+        if (document.getElementById('enable-script').checked) {
+            const scriptModule = {
+                type: 'script',
+                language: 'javascript', // Added language field
+                uuid: document.getElementById('bp-uuid-script').value,
+                version: [
+                    parseInt(document.getElementById('bp-version-major').value),
+                    parseInt(document.getElementById('bp-version-minor').value),
+                    parseInt(document.getElementById('bp-version-rev').value)
+                ],
+                entry: document.getElementById('bp-script-entry').value || 'scripts/main.js' // Added default entry
+            };
+
+            // Handle API dependencies (module_name format)
+            const apiDependencies = [];
+            document.querySelectorAll('.api-item').forEach(item => {
+                const moduleName = item.querySelector('.api-module').value;
+                const version = item.querySelector('.api-version').value;
+                if (moduleName && version) {
+                    apiDependencies.push({
+                        module_name: moduleName, // Changed from 'module' to 'module_name'
+                        version: version
+                    });
+                }
+            });
+            if (apiDependencies.length > 0) {
+                scriptModule.dependencies = apiDependencies;
+            }
+
+            manifest.modules.push(scriptModule);
+        }
+
+        // Handle external dependencies (UUID format)
+        const uuidDependencies = [];
+        document.querySelectorAll('.dependency-item').forEach(item => {
+            const inputs = item.querySelectorAll('input');
+            if (inputs[0].value && inputs[1].value) {
+                uuidDependencies.push({
+                    uuid: inputs[0].value,
+                    version: inputs[1].value.match(/\d+/g) ? 
+                        inputs[1].value.split(',').map(Number) : // Array version [1,0,0]
+                        inputs[1].value // String version "1.0.0"
+                });
+            }
+        });
+        if (uuidDependencies.length > 0) {
+            manifest.dependencies = uuidDependencies;
+        }
+
+        // Add capabilities for BP
+        manifest.capabilities = ["script_eval"]; // Or get from form inputs
+
         bpManifest = manifest;
     }
 
