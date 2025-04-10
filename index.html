@@ -45,11 +45,10 @@
                 </div>
                 
                 <label>Min Engine Version:</label>
-                <div class="version-input">
-                    <input type="number" id="rp-min-engine-major" value="1" min="1">.
-                    <input type="number" id="rp-min-engine-minor" value="0" min="0">.
-                    <input type="number" id="rp-min-engine-rev" value="0" min="0">
-                </div>
+                <select id="rp-min-engine-version">
+                    <option value="">Choose Version</option>
+                <!-- Options will be populated by JavaScript -->
+                </select>
                 
                 <label>Capabilities:</label>
                 <div>
@@ -127,11 +126,10 @@
                 </div>
 
                 <label>Min Engine Version:</label>
-                <div class="version-input">
-                    <input type="number" id="bp-min-engine-major" value="1" min="1">.
-                    <input type="number" id="bp-min-engine-minor" value="0" min="0">.
-                    <input type="number" id="bp-min-engine-rev" value="0" min="0">
-                </div>
+                <select id="bp-min-engine-version">
+                    <option value="">Choose Version</option>
+                <!-- Options will be populated by JavaScript -->
+                </select>
 
                 <label>Dependencies:</label>
                 <div id="bp-dependencies"></div>

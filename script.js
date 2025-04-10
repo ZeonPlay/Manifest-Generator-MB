@@ -10,12 +10,41 @@ const API_VERSIONS = {
         "2.0.0-beta", "1.3.0", "1.2.0", "1.1.0", "1.0.0"
     ],
     "@minecraft/server-net": ["1.0.0-beta"],
-    "@minecraft/server-admin": ["1.0.0-beta"]
+    "@minecraft/server-admin": ["1.0.0-beta"],
+    "min_engine_versions": [
+        "1.0.0", "1.1.0", "1.2.0", "1.3.0", "1.4.0",
+        "1.5.0", "1.6.0", "1.7.0", "1.8.0", "1.9.0",
+        "1.10.0", "1.11.0", "1.12.0", "1.13.0", "1.14.0",
+        "1.15.0", "1.16.0", "1.17.0", "1.18.0", "1.19.0",
+        "1.20.0", "1.21.0"
+    ]
 };
 
 let currentTab = 'rp';
 let rpManifest = null; // Untuk menyimpan manifest Resource Pack
 let bpManifest = null; // Untuk menyimpan manifest Behavior Pack
+
+// Fungsi untuk mengisi dropdown min_engine_version
+function populateMinEngineVersionDropdowns() {
+    const rpMinEngineSelect = document.getElementById('rp-min-engine-version');
+    const bpMinEngineSelect = document.getElementById('bp-min-engine-version');
+
+    // Mengisi dropdown untuk Resource Pack
+    API_VERSIONS["min_engine_versions"].forEach(version => {
+        const option = document.createElement('option');
+        option.value = version;
+        option.textContent = version;
+        rpMinEngineSelect.appendChild(option);
+    });
+
+    // Mengisi dropdown untuk Behavior Pack
+    API_VERSIONS["min_engine_versions"].forEach(version => {
+        const option = document.createElement('option');
+        option.value = version;
+        option.textContent = version;
+        bpMinEngineSelect.appendChild(option);
+    });
+}
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
@@ -35,6 +64,9 @@ document.addEventListener('DOMContentLoaded', function() {
     generateUUID('rp-uuid-module');
     generateUUID('bp-uuid-data');
     generateUUID('bp-uuid-script');
+
+    // Populate min engine version dropdowns
+    populateMinEngineVersionDropdowns(); // Panggil fungsi ini di sini
 });
 
 // Tab switching
@@ -141,11 +173,7 @@ function generateManifest() {
                 parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-minor' : 'bp-version-minor').value),
                 parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-rev' : 'bp-version-rev').value)
             ],
-            min_engine_version: [
-                parseInt(document.getElementById(currentTab === 'rp' ? 'rp-min-engine-major' : 'bp-min-engine-major').value),
-                parseInt(document.getElementById(currentTab === 'rp' ? 'rp-min-engine-minor' : 'bp-min-engine-minor').value),
-                parseInt(document.getElementById(currentTab === 'rp' ? 'rp-min-engine-rev' : 'bp-min-engine-rev').value)
-            ]
+            min_engine_version: document.getElementById(currentTab === 'rp' ? 'rp-min-engine-version' : 'bp-min-engine-version').value // Update this line
         },
         modules: []
     };
@@ -219,7 +247,7 @@ function generateManifest() {
             const apiDependencies = [];
             document.querySelectorAll('.api-item').forEach(item => {
                 const moduleName = item.querySelector('.api-module').value;
-                const version = item.querySelector('.api-version').value;
+                const version = item.querySelector('. api-version').value;
                 if (moduleName && version) {
                     apiDependencies.push({
                         module_name: moduleName, // Changed from 'module' to 'module_name'
