@@ -247,10 +247,10 @@ function generateManifest() {
             const apiDependencies = [];
             document.querySelectorAll('.api-item').forEach(item => {
                 const moduleName = item.querySelector('.api-module').value;
-                const version = item.querySelector('. api-version').value;
+                const version = item.querySelector('.api-version').value; // <-- HAPUS SPASI SEBELUM .api-version
                 if (moduleName && version) {
                     apiDependencies.push({
-                        module_name: moduleName, // Changed from 'module' to 'module_name'
+                        module_name: moduleName,
                         version: version
                     });
                 }
