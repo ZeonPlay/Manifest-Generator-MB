@@ -154,15 +154,25 @@ button.secondary {
 .remove-btn {
     position: absolute;
     right: 10px;
-    top: 10px;
+    top: -25px;
+    transform: translateX(22%);
     background: #e74c3c;
     color: white;
     border: none;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    font-size: 12px;
+    border-radius: 3px;
+    width: 48px;
+    height: 24px;
+    font-size: 14px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    padding: 0;
+}
+
+.remove-btn:hover {
+    background: #c0392b;
 }
 
 .api-item {
