@@ -1,285 +1,305 @@
 :root {
-    --primary: #2ecc71;
-    --secondary: #27ae60;
-    --dark: #2c3e50;
+    --primary: #00ff88;
+    --secondary: #00cc6a;
+    --accent: #7c3aed;
+    --dark: #0f172a;
+    --darker: #0a1120;
+    --glass: rgba(255, 255, 255, 0.05);
+    --neon-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+    
+    --gradient-bg: linear-gradient(
+        45deg,
+        #0f172a 0%,
+        #1e293b 50%,
+        #334155 100%
+    );
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--gradient-bg);
+    color: #f8fafc;
+    min-height: 100vh;
+    line-height: 1.6;
+    padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
-    background: #f5f6fa;
-    color: #333;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 60%);
+    z-index: -1;
+    animation: grain 8s steps(10) infinite;
+}
+
+@keyframes grain {
+    0%, 100% { transform: translate(0, 0) }
+    10% { transform: translate(-5%, -10%) }
+    20% { transform: translate(-15%, 5%) }
+    30% { transform: translate(7%, -25%) }
+    40% { transform: translate(-5%, 25%) }
+    50% { transform: translate(-15%, 10%) }
+    60% { transform: translate(15%, 0%) }
+    70% { transform: translate(0%, 15%) }
+    80% { transform: translate(3%, -35%) }
+    90% { transform: translate(-10%, 10%) }
 }
 
 h1 {
-    color: var(--dark);
+    font-size: 2.5rem;
+    background: linear-gradient(45deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
     text-align: center;
+    margin: 2rem 0;
+    text-shadow: var(--neon-shadow);
+    letter-spacing: -0.05em;
 }
 
 .tabs {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 1rem;
+    margin-bottom: 2rem;
     justify-content: center;
+    position: relative;
 }
 
 .tab-button {
-    padding: 12px 24px;
-    background: var(--primary);
-    border: none;
+    padding: 1rem 2rem;
+    background: var(--glass);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
     cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background 0.3s;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
 .tab-button:hover {
-    background: var(--secondary);
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.tab-button:hover::before {
+    opacity: 1;
 }
 
 .tab-button.active {
-    background: var(--dark);
+    background: var(--primary);
+    color: var(--dark);
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
+    border-color: transparent;
 }
 
 .form-section {
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
+    background: var(--glass);
+    padding: 2rem;
+    border-radius: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 1;
+}
+
+.form-section.hidden {
+    display: block !important; /* Override display none */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    position: absolute;
+}
+
+.form-section:hover {
+    transform: translateY(-5px);
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
 }
 
 label {
     display: block;
-    margin: 10px 0 5px;
-    font-weight: bold;
+    margin: 1rem 0 0.5rem;
+    font-weight: 500;
+    color: #94a3b8;
 }
 
 input, select, textarea {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
+    padding: 0.875rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.2);
 }
 
 input[type="number"] {
-    width: 80px;
-    display: inline-block;
-    margin-right: 10px;
-}
-
-.version-input {
-    margin-bottom: 15px;
-}
-
-.module-toggle {
-    margin: 15px 0;
-    display: flex;
-    gap: 20px;
-}
-
-.module-toggle label {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    cursor: pointer;
-}
-
-.module-section {
-    margin-top: 15px;
-    padding: 15px;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    background: #f9f9f9;
+    width: auto;
+    padding: 0.5rem 0.875rem;
+    margin-right: 1rem;
 }
 
 .preview {
-    background: var(--dark);
-    color: #f1f1f1;
-    padding: 20px;
-    border-radius: 5px;
-    max-height: 500px;
-    overflow-y: auto;
-    font-family: 'Courier New', monospace;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
+    overflow: hidden;
 }
 
-.action-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
+.preview::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--primary), transparent);
+}
+
+.preview .clearForm {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.preview .clearForm:hover {
+    background: rgba(0, 0, 0, 0.7);
 }
 
 button {
-    padding: 10px 20px;
+    padding: 0.875rem 1.75rem;
     background: var(--primary);
-    color: white;
+    color: var(--dark);
     border: none;
-    border-radius: 4px;
+    border-radius: 0.75rem;
     cursor: pointer;
-    transition: background 0.3s;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 button:hover {
     background: var(--secondary);
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
+    transform: translateY(-2px);
 }
 
-button.secondary {
-    background: #7f8c8d;
-}
-
-.hidden {
-    display: none;
-}
-
-.subpack-item, .dependency-item, .api-item {
-    background: #f0f0f0;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    position: relative;
+.generate-manifest-btn {
+    font-size: 1.1rem;
+    padding: 1.25rem 2.5rem;
+    border-radius: 1rem;
+    background: linear-gradient(45deg, var(--primary), var(--accent));
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .remove-btn {
-    position: absolute;
-    right: 10px;
-    top: -25px;
-    transform: translateX(22%);
-    background: #e74c3c;
+    background: #ef4444;
     color: white;
-    border: none;
-    border-radius: 3px;
-    width: 48px;
-    height: 24px;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-    padding: 0;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.75rem;
 }
 
 .remove-btn:hover {
-    background: #c0392b;
+    background: #dc2626;
 }
 
-.api-item {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+/* Animasi Floating */
+@keyframes float {
+    0%, 100% { transform: translateY(0px) }
+    50% { transform: translateY(-10px) }
 }
 
-.api-item select {
-    flex: 1;
+.generate-manifest-btn {
+    animation: float 4s ease-in-out infinite;
 }
 
-#loading {
-    color: #fff;
-    text-align: center;
-    padding: 10px;
-    font-style: italic;
-}
-
-.clearForm {
-    position: absolute;
-    top: 10px; /* Jarak dari atas */
-    right: 10px; /* Jarak dari kanan */
-    z-index: 1000; /* Pastikan tombol berada di atas elemen lain */
-    padding: 10px 20px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.clearForm:hover {
-    background-color: #d32f2f;
-}
-
-/* Default styles (untuk layar besar seperti Windows desktop) sudah ada */
-
-/* Tambahkan media queries untuk layar kecil */
+/* Responsive Design */
 @media (max-width: 768px) {
     body {
-        padding: 10px;
+        padding: 1rem;
     }
-
-    .tabs {
-        flex-direction: column;
-        gap: 5px;
+    
+    .form-section {
+        padding: 1.5rem;
     }
-
+    
     .tab-button {
         width: 100%;
-        text-align: center;
+        padding: 1rem;
     }
-
-    .form-section {
-        padding: 15px;
-    }
-
+    
     .grid {
-        grid-template-columns: 1fr; /* Satu kolom untuk layar kecil */
-    }
-
-    .action-buttons {
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    button {
-        width: 100%; /* Tombol memenuhi lebar layar */
-    }
-
-    .preview {
-        max-height: 300px; /* Batasi tinggi preview pada layar kecil */
-        overflow-y: auto;
-    }
-
-    .clearForm {
-        position: static; /* Posisi tombol Clear Form diatur ulang */
-        margin-top: 10px;
-        width: 100%;
+        grid-template-columns: 1fr;
     }
 }
 
-/* Container untuk checkbox dan tombol */
-.manifest-actions {
-    text-align: center;
-    margin: 20px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px; /* Jarak antara checkbox dan tombol */
-}
-
-/* Styling untuk tombol Generate Manifest */
-.generate-manifest-btn {
-    padding: 15px 30px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background-color: #4caf50;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
-}
-
-.generate-manifest-btn:hover {
-    background-color: #45a049;
+/* Glow Effect */
+.glow {
+    position: fixed;
+    pointer-events: none;
+    background: radial-gradient(600px at var(--x) var(--y), 
+        rgba(0, 255, 136, 0.15), transparent 80%);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
 }

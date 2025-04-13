@@ -12,8 +12,8 @@
     <h1>Minecraft Manifest Generator</h1>
     
     <div class="tabs">
-        <button class="tab-button active" onclick="switchTab('rp')">Resource Pack</button>
-        <button class="tab-button" onclick="switchTab('bp')">Behavior Pack</button>
+        <button class="tab-button active" data-tab="rp" onclick="switchTab('rp')">Resource Pack</button>
+        <button class="tab-button" data-tab="bp" onclick="switchTab('bp')">Behavior Pack</button>
     </div>
 
     <!-- Resource Pack Form -->
@@ -160,5 +160,14 @@
     </div>
 
     <script src="script.js"></script>
+
+    <div class="glow"></div>
+<script>
+    // Glow effect follow mouse
+    document.addEventListener('mousemove', (e) => {
+        document.documentElement.style.setProperty('--x', `${e.clientX}px`);
+        document.documentElement.style.setProperty('--y', `${e.clientY}px`);
+    });
+</script>
 </body>
 </html>

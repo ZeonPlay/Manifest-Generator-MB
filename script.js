@@ -72,10 +72,17 @@ document.addEventListener('DOMContentLoaded', function() {
 // Tab switching
 function switchTab(tab) {
     currentTab = tab;
-    document.querySelectorAll('.form-section').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
     document.getElementById(tab + '-form').classList.remove('hidden');
-    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    document.querySelectorAll('.form-section').forEach(form => {
+        form.classList.toggle('hidden', form.id !== `${tab}-form`);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        switchTab('rp'); // Force initial state
+    });
 }
 
 // UUID generation
