@@ -109,6 +109,24 @@ function addSubpack() {
     container.appendChild(div);
 }
 
+// Behavior Pack Subpack management
+function addBpSubpack() {
+    const container = document.getElementById('bp-subpacks-container');
+    const div = document.createElement('div');
+    div.className = 'subpack-item';
+    div.innerHTML = `
+        <button class="remove-btn" onclick="this.parentNode.remove()">×</button>
+        <input type="text" placeholder="Subpack Name" class="subpack-name" required>
+        <input type="text" placeholder="Folder Name" class="subpack-folder" required>
+        <select class="subpack-tier">
+            <option value="1">Tier 1 (Low Memory)</option>
+            <option value="2">Tier 2 (Medium)</option>
+            <option value="3">Tier 3 (High)</option>
+        </select>
+    `;
+    container.appendChild(div);
+}
+
 // Dependency management
 function addDependency() {
     const container = document.getElementById('bp-dependencies');
@@ -282,6 +300,18 @@ function generateManifest() {
         // Add capabilities for BP
         manifest.capabilities = ["script_eval"]; // Or get from form inputs
 
+        const subpacks = [];
+        document.querySelectorAll('#bp-subpacks-container .subpack-item').forEach(item => {
+            subpacks.push({
+                name: item.querySelector('.subpack-name').value,
+                folder_name: item.querySelector('.subpack-folder').value,
+                memory_tier: parseInt(item.querySelector('.subpack-tier').value)
+            });
+        });
+        if (subpacks.length > 0) {
+            manifest.subpacks = subpacks;
+        }
+
         bpManifest = manifest;
     }
 
@@ -378,6 +408,7 @@ function clearForm() {
         document.getElementById('data-module-section').style.display = 'block';
         document.getElementById('script-module-section').style.display = 'block';
         document.getElementById('subpacks-container').innerHTML = '';
+        document.getElementById('bp-subpacks-container').innerHTML = '';
         document.getElementById('bp-dependencies').innerHTML = '';
         document.getElementById('script-apis').innerHTML = `
             <div class="api-item">
