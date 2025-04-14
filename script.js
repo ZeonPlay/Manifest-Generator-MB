@@ -20,6 +20,33 @@ const API_VERSIONS = {
     ]
 };
 
+const licenseInfo = {
+    "MIT": {
+        name: "MIT License",
+        desc: "Commercial use, modification, distribution, and personal use are allowed. Requires preservation of copyright and license notice."
+    },
+    "Apache-2.0": {
+        name: "Apache License 2.0",
+        desc: "Allows for patent use, requires changes to the file notice. Suitable for enterprise software."
+    },
+    "GPL-3.0-only": {
+        name: "GNU GPLv3",
+        desc: "Copyleft - modifications must be open source under the same license. For projects that want to maintain openness."
+    },
+    "BSD-3-Clause": {
+        name: "BSD 3-Clause",
+        desc: "Only requires preservation of copyright notice. Allows redistribution of binaries without source code."
+    },
+    "CC0-1.0": {
+        name: "Creative Commons Zero",
+        desc: "Waives all copyright to the public domain. Free to use for anything without attribution."
+    },
+    "ISC": {
+        name: "ISC License",
+        desc: "Equivalent to the MIT License, with a simpler format. Commonly used in Node.js projects."
+    }
+};
+
 let currentTab = 'rp';
 let rpManifest = null; // Untuk menyimpan manifest Resource Pack
 let bpManifest = null; // Untuk menyimpan manifest Behavior Pack
@@ -242,6 +269,54 @@ function generateManifest() {
     } 
     // Handle Behavior Pack
     else if (currentTab === 'bp') {
+        
+        // Di dalam blok Behavior Pack (else if (currentTab === 'bp'))
+        const metadata = {};
+        const authors = document.getElementById('bp-authors').value
+            .split(',')
+            .map(a => a.trim())
+            .filter(a => a);
+            
+        if (authors.length > 0) metadata.authors = authors;
+        
+        const license = document.getElementById('bp-license').value;
+        if (license) metadata.license = license;
+        
+        const url = document.getElementById('bp-url').value;
+        if (url) metadata.url = url;
+        
+        const generatedWith = {};
+        document.getElementById('bp-generated-with').value
+            .split('\n')
+            .forEach(line => {
+                const [tool, versions] = line.split(':');
+                if (tool && versions) {
+                    generatedWith[tool.trim()] = versions.split(',').map(v => v.trim());
+                }
+            });
+            
+        if (Object.keys(generatedWith).length > 0) {
+            metadata.generated_with = generatedWith;
+        }
+        
+        if (Object.keys(metadata).length > 0) {
+            manifest.metadata = metadata;
+        }
+
+        // Event listener untuk license dropdown
+document.getElementById('bp-license').addEventListener('change', function() {
+    const descDiv = document.getElementById('license-description');
+    const customInput = document.getElementById('bp-custom-license');
+    
+    if (this.value === 'Custom') {
+        customInput.classList.remove('hidden');
+        descDiv.textContent = "Masukkan nama lisensi custom sesuai kebutuhan";
+    } else {
+        customInput.classList.add('hidden');
+        descDiv.textContent = licenseInfo[this.value]?.desc || "";
+    }
+});
+
         // Data Module
         if (document.getElementById('enable-data').checked) {
             manifest.modules.push({
@@ -418,6 +493,10 @@ function clearForm() {
         document.getElementById('subpacks-container').innerHTML = '';
         document.getElementById('bp-subpacks-container').innerHTML = '';
         document.getElementById('bp-dependencies').innerHTML = '';
+        document.getElementById('bp-authors').value = '';
+        document.getElementById('bp-license').value = '';
+        document.getElementById('bp-url').value = '';
+        document.getElementById('bp-generated-with').value = '';
         document.getElementById('script-apis').innerHTML = `
             <div class="api-item">
                 <select class="api-module" onchange="updateApiVersions(this)">

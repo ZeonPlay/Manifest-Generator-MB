@@ -148,6 +148,42 @@ h1 {
     transform: translateY(-5px);
 }
 
+.metadata-section {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin: 1rem 0;
+}
+
+.metadata-section label {
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+}
+
+#bp-generated-with {
+    min-height: 100px;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+/* CSS untuk license selector */
+.license-selector {
+    position: relative;
+    margin: 1rem 0;
+}
+
+#bp-license {
+    margin-bottom: 0.5rem;
+}
+
+.hidden {
+    display: none;
+}
+
+#bp-custom-license {
+    margin-top: 0.5rem;
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));

@@ -79,6 +79,38 @@
                 <input type="text" id="bp-uuid-header" placeholder="Will auto-generate if empty">
                 <button onclick="generateUUID('bp-uuid-header')" class="secondary">Generate</button>
 
+                <label>Metadata:</label>
+                <div class="metadata-section">
+                    <label for="bp-authors">Authors (comma separated):</label>
+                    <input type="text" id="bp-authors" placeholder="Author1, Author2">
+
+                    <!-- Ganti input license dengan ini -->
+                    <div class="license-selector">
+                        <label for="bp-license">License:</label>
+                        <select id="bp-license">
+                            <option value="">Choose License</option>
+                            <option value="MIT">MIT License (Popular open source software)</option>
+                            <option value="Apache-2.0">Apache License 2.0 (Business-friendly license)</option>
+                            <option value="GPL-3.0-only">GPLv3 (Strong copyleft)</option>
+                            <option value="BSD-3-Clause">BSD 3-Clause (Minimal restriction)</option>
+                            <option value="CC0-1.0">CC0 (Public Domain)</option>
+                            <option value="ISC">ISC License (Simple like MIT)</option>
+                            <option value="Custom">Custom/Other</option>
+                        </select>
+                        <div id="license-description" class="license-description"></div>
+                    </div>
+                    
+                    <!-- Tambahkan input untuk custom license (hidden awalnya) -->
+                    <input type="text" id="bp-custom-license" class="hidden" placeholder="Masukkan nama lisensi custom">
+
+                    <label for="bp-url">URL:</label>
+                    <input type="url" id="bp-url" placeholder="https://example.com">
+
+                    <label for="bp-generated-with">Generated With (tool:versions):</label>
+                    <textarea id="bp-generated-with" 
+                        placeholder="example_tool:1.0.0,1.1.0\nanother_tool:2.0.0"></textarea>
+                </div>
+
                 <div class="module-toggle">
                     <label>
                         <input type="checkbox" id="enable-data" checked> Data Module
