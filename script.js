@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Generate default UUIDs
     generateUUID('rp-uuid-header');
     generateUUID('rp-uuid-module');
+    generateUUID('bp-uuid-header');
     generateUUID('bp-uuid-data');
     generateUUID('bp-uuid-script');
 
@@ -192,7 +193,7 @@ function generateManifest() {
         header: {
             name: document.getElementById(currentTab === 'rp' ? 'rp-name' : 'bp-name').value,
             description: document.getElementById(currentTab === 'rp' ? 'rp-description' : 'bp-description').value,
-            uuid: document.getElementById(currentTab === 'rp' ? 'rp-uuid-header' : 'bp-uuid-data').value,
+            uuid: document.getElementById(currentTab === 'rp' ? 'rp-uuid-header' : 'bp-uuid-header').value,
             version: [
                 parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-major' : 'bp-version-major').value),
                 parseInt(document.getElementById(currentTab === 'rp' ? 'rp-version-minor' : 'bp-version-minor').value),

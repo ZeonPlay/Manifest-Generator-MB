@@ -75,6 +75,10 @@
                 <label for="bp-description">Description:</label>
                 <textarea id="bp-description" rows="3" placeholder="A detailed description of your pack"></textarea>
 
+                <label for="bp-uuid-header">UUID (Header):</label>
+                <input type="text" id="bp-uuid-header" placeholder="Will auto-generate if empty">
+                <button onclick="generateUUID('bp-uuid-header')" class="secondary">Generate</button>
+
                 <div class="module-toggle">
                     <label>
                         <input type="checkbox" id="enable-data" checked> Data Module
