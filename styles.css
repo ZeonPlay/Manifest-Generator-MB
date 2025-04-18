@@ -1,3 +1,4 @@
+/* styles.css */
 :root {
     --primary: #00ff88;
     --secondary: #00cc6a;
@@ -6,7 +7,6 @@
     --darker: #0a1120;
     --glass: rgba(255, 255, 255, 0.05);
     --neon-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
-    
     --gradient-bg: linear-gradient(
         45deg,
         #0f172a 0%,
@@ -32,6 +32,7 @@ body {
     margin: 0 auto;
     position: relative;
     overflow-x: hidden;
+    overflow-y: auto;
 }
 
 body::before {
@@ -134,6 +135,8 @@ h1 {
     transition: transform 0.3s;
     transition: opacity 0.3s ease, transform 0.3s ease;
     opacity: 1;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
 }
 
 .form-section.hidden {
